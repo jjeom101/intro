@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>실시간 시계</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: white;
+        }
+
+        #app {
+            text-align: center;
+            background: white;
+            /* 패딩을 줄여 전체적인 크기 축소 */
+            padding: 20px 30px; 
+            border-radius: 10px;
+            box-shadow: 0 5px 15px gray;
+        }
+
+        .clock-display {
+            /* 글자 크기를 2.5em으로 줄임 */
+            font-size: 2.5em; 
+            color: #333;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin: 0;
+            text-shadow: 1px 1px 1px gray;
+        }
+
+        .date-display {
+            /* 글자 크기를 1em으로 줄임 */
+            margin-top: 5px; 
+            font-size: 1em;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="date-display">{{ date }}</div>
+        <div class="clock-display">{{ time }}</div>
+    </div>
+
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    date: '',
+                    time: ''
+                };
+            },
+            methods: {
+                updateTime() {
+                    const now = new Date();
+                    // 날짜 형식을 '2025년 9월 1일 월요일'과 같이 만듭니다.
+                    const optionsDate = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+                    this.date = now.toLocaleDateString('ko-KR', optionsDate);
+
+                    // 시간 형식을 '오후 4:38:33'과 같이 만듭니다.
+                    const optionsTime = { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
+                    this.time = now.toLocaleTimeString('ko-KR', optionsTime);
+                }
+            },
+            mounted() {
+                // 컴포넌트가 처음 마운트될 때 즉시 시간을 업데이트합니다.
+                this.updateTime();
+                // 1초(1000ms)마다 updateTime 메서드를 반복 실행합니다.
+                setInterval(this.updateTime, 1000);
+            }
+        });
+
+        app.mount('#app');
+    </script>
+</body>
+
+</html>
